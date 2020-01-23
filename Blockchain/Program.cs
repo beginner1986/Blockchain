@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Security.Cryptography;
+using System.Diagnostics;
+using System.Threading;
 
 namespace Blockchain
 {
@@ -32,9 +34,17 @@ namespace Blockchain
 
             // generate the block
             Console.WriteLine("Tworzenie bloku...");
+            Stopwatch timer = new Stopwatch();
+            timer.Start();
             Block block = new Block(payments, prevHash, j);
+            timer.Stop();
+            TimeSpan ts = timer.Elapsed;
+            string elapsedTime = string.Format("{0:00}:{1:00}:{2:00}.{3:00}",
+            ts.Hours, ts.Minutes, ts.Seconds,
+            ts.Milliseconds / 10);
+            Console.WriteLine("RunTime " + elapsedTime);
 
-            // print the generated blosk
+            // print the generated blok
             block.ToString();
         }
     }

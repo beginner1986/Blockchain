@@ -40,7 +40,6 @@ namespace Blockchain
                 fullBlock = MakeFullBlock(merkleHash, prevHash, mineTime, blockNumber, randomNumber);
                 thisHash = sha256.ComputeHash(fullBlock);
                 zerosCount = CountZeros(thisHash);
-                Console.Write('.');
             }
         }
 
