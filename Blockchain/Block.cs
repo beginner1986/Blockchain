@@ -7,7 +7,7 @@ namespace Blockchain
 {
     class Block
     {
-        static int BlocksCount = 0;
+        static int BlocksCount = 1;
 
         private readonly byte[] merkleHash;
         private readonly byte[] prevHash;
@@ -88,7 +88,7 @@ namespace Blockchain
             int result = 0;
             for(int i=0; i<hash.Length; i++)
             {
-                if (hash[i] == 0)
+                if (hash[i] == (byte)0)
                     result++;
                 else
                     break;
@@ -126,41 +126,32 @@ namespace Blockchain
 
         public override string ToString()
         {
-            /*
-                private readonly byte[] merkleHash;
-                private readonly byte[] prevHash;
-                private readonly DateTime mineTime;
-                private readonly int blockNumber;
-                private long randomNumber;
-                private byte[] thisHash;
-             */
-
             StringBuilder result = new StringBuilder();
 
             // block nuber
-            result.Append("Block number: ");
+            result.Append("Numer bloku: ");
             result.Append(blockNumber);
 
             // Merkle tree hash
-            result.Append("\nTotal hash: ");
+            result.Append("\nSkrót wszystkich transakcji: ");
             for (int i = 0; i < merkleHash.Length; i++)
                 result.Append(merkleHash[i].ToString("x2"));
 
             // previous block hash
-            result.Append("\nPrevious hash: ");
+            result.Append("\nSkrót z poprzedniego bloku: ");
             for (int i = 0; i < prevHash.Length; i++)
                 result.Append(prevHash[i].ToString("x2"));
 
             // mining time
-            result.Append("\nBlock mining time: ");
+            result.Append("\nCzas wykopania bloku: ");
             result.Append(mineTime.ToString());
 
             // random number
-            result.Append("\nRandom number: ");
+            result.Append("\nLiczba losowa: ");
             result.Append(randomNumber);
 
             // this block hash
-            result.Append("\nCurrent block hash: ");
+            result.Append("\nSkrót bieżącego bloku: ");
             for (int i = 0; i < thisHash.Length; i++)
                 result.Append(thisHash[i].ToString("x2"));
 
