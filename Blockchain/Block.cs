@@ -19,22 +19,29 @@ namespace Blockchain
         public Block(List<byte[]> payments, byte[] prevHash, int j)
         {
             Random random = new Random();
+            SHA256 sha256 = SHA256.Create();
 
+            // class fields initialization
             blockNumber = BlocksCount++;
             merkleHash = MerkleTree(payments);
             this.prevHash = prevHash;
             mineTime = DateTime.Now;
             randomNumber = random.Next();
 
+            // block as single byte array
             byte[] fullBlock = MakeFullBlock(merkleHash, prevHash, mineTime, blockNumber, randomNumber);
+            thisHash = sha256.ComputeHash(fullBlock);
+            int zerosCount = CountZeros(thisHash);
 
-
-            /*
-            // Merkle tree test
-            byte[] hash = MerkleTree(payments);
-            for (int i = 0; i < hash.Length; i++)
-                Console.Write($"{hash[i]}");
-             */ 
+            // shuffle random number untill j initial zeros will appear in the beginning of hash
+            while(zerosCount < j)
+            {
+                randomNumber = random.Next();
+                fullBlock = MakeFullBlock(merkleHash, prevHash, mineTime, blockNumber, randomNumber);
+                thisHash = sha256.ComputeHash(fullBlock);
+                zerosCount = CountZeros(thisHash);
+                Console.Write('.');
+            }
         }
 
         private byte[] MerkleTree(List<byte[]> payments)
@@ -116,6 +123,49 @@ namespace Blockchain
             Array.Copy(randomNumberBytes, 0, result, position, randomNumberBytes.Length);
 
             return result;
+        }
+
+        public override string ToString()
+        {
+            /*
+                private readonly byte[] merkleHash;
+                private readonly byte[] prevHash;
+                private readonly DateTime mineTime;
+                private readonly int blockNumber;
+                private long randomNumber;
+                private byte[] thisHash;
+             */
+
+            StringBuilder result = new StringBuilder();
+
+            // block nuber
+            result.Append("Block number: ");
+            result.Append(blockNumber);
+
+            // Merkle tree hash
+            result.Append("\nTotal hash: ");
+            for (int i = 0; i < merkleHash.Length; i++)
+                result.Append(merkleHash[i].ToString("x2"));
+
+            // previous block hash
+            result.Append("\nPrevious hash: ");
+            for (int i = 0; i < prevHash.Length; i++)
+                result.Append(prevHash[i].ToString("x2"));
+
+            // mining time
+            result.Append("\nBlock mining time: ");
+            result.Append(mineTime.ToString());
+
+            // random number
+            result.Append("\nRandom number: ");
+            result.Append(randomNumber);
+
+            // this block hash
+            result.Append("\nCurrent block hash: ");
+            for (int i = 0; i < thisHash.Length; i++)
+                result.Append(thisHash[i].ToString("x2"));
+
+            return result.ToString();
         }
     }
 }
