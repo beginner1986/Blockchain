@@ -27,7 +27,7 @@ namespace Blockchain
 
             // transactions generation
             Console.WriteLine("Generowanie transakcji...");
-            for (byte i = 0; i < 70; i++)
+            for (byte i = 0; i < 3; i++)
             {
                 byte[] payment = new byte[256];
                 random.NextBytes(payment);
@@ -49,6 +49,9 @@ namespace Blockchain
 
             // print the generated blok
             Console.WriteLine(block.ToString());
+
+            // hold the screen
+            Console.ReadKey(true);
         }
     }
 }

@@ -26,9 +26,10 @@ namespace Blockchain
             merkleHash = MerkleTree(payments);
             this.prevHash = prevHash;
             mineTime = DateTime.Now;
-            randomNumber = random.Next();
 
             // block as single byte array
+            //randomNumber = random.Next();
+            randomNumber = 0;
             byte[] fullBlock = MakeFullBlock(merkleHash, prevHash, mineTime, blockNumber, randomNumber);
             thisHash = sha256.ComputeHash(fullBlock);
             int zerosCount = CountZeros(thisHash);
@@ -36,7 +37,7 @@ namespace Blockchain
             // shuffle random number untill j initial zeros will appear in the beginning of hash
             while(zerosCount < j)
             {
-                randomNumber = random.Next();
+                randomNumber++;
                 fullBlock = MakeFullBlock(merkleHash, prevHash, mineTime, blockNumber, randomNumber);
                 thisHash = sha256.ComputeHash(fullBlock);
                 zerosCount = CountZeros(thisHash);
@@ -88,25 +89,28 @@ namespace Blockchain
             int result = 0;
             for(int i=0; i<hash.Length; i++)
             {
-                if (hash[i] == (byte)0)
+                if (hash[i] == 0)
                     result++;
                 else
                     break;
             }
 
+            /*
+            Console.Write($"Zeros: {result} | ");
+            foreach (byte b in hash)
+                Console.Write($"{b.ToString()}");
+            Console.WriteLine();
+             */
+
             return result;
         }
 
         private byte[] MakeFullBlock(byte[] merkleHash, byte[] prevHash,
-        DateTime mineTime, int blockNumber, long randomNumber)
+            DateTime mineTime, int blockNumber, long randomNumber)
         {
             byte[] mineTimeBytes = Encoding.UTF8.GetBytes(mineTime.ToString());
             byte[] blockNumberBytes = BitConverter.GetBytes(blockNumber);
             byte[] randomNumberBytes = BitConverter.GetBytes(randomNumber);
-            byte[] fullBlock =
-                new byte[merkleHash.Length + prevHash.Length + mineTimeBytes.Length
-                + blockNumberBytes.Length + randomNumberBytes.Length];
-
             byte[] result = new byte[merkleHash.Length + prevHash.Length + mineTimeBytes.Length
                 + blockNumberBytes.Length + randomNumberBytes.Length];
 
@@ -153,7 +157,7 @@ namespace Blockchain
             // this block hash
             result.Append("\nSkrót bieżącego bloku: ");
             for (int i = 0; i < thisHash.Length; i++)
-                result.Append(thisHash[i].ToString("x2"));
+                result.Append(thisHash[i].ToString());
 
             return result.ToString();
         }
