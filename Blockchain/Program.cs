@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Diagnostics;
@@ -20,9 +21,8 @@ namespace Blockchain
 
             // previous (random) block hash
             Console.WriteLine("Generowanie poprzedniego bloku...");
-            byte[] initValue = new byte[256];
-            random.NextBytes(new byte[256]);
-            byte[] prevHash = sha256.ComputeHash(initValue);
+            string initValue = "Initial value";
+            string prevHash = BitConverter.ToString(sha256.ComputeHash(Encoding.UTF8.GetBytes(initValue)));
             List<byte[]> payments = new List<byte[]>();
 
             // transactions generation
@@ -48,7 +48,7 @@ namespace Blockchain
             Console.WriteLine();
 
             // print the generated blok
-            Console.WriteLine(block.ToString());
+            // Console.WriteLine(block.ToString());
 
             // hold the screen
             Console.ReadKey(true);
